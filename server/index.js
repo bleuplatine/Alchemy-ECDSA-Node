@@ -22,9 +22,17 @@ app.get("/balance/:address", (req, res) => {
 app.post("/send", (req, res) => {
   // TODO: get a signature from the client-side application
   // recover the public address from the signature
-  
-  const { sender, recipient, amount } = req.body;
+
+  const { signature, recipient, amount } = req.body;
+  [isSigned, sender] = signature
+  console.log('isSigned', isSigned)
   console.log('sender', sender)
+
+  if (!isSigned) {
+    res.status(400).send({ message: "Error signature" });
+    return;
+  }
+
   setInitialBalance(sender);
   setInitialBalance(recipient);
 
